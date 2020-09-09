@@ -48,7 +48,7 @@ def test_intersection():
 
 
 
-def test_of_matrix_multiplication()
+def test_of_matrix_multiplication():
     matrix1 = Matrix.from_lists(
         [0, 0, 1, 1],
         [0, 1, 0, 1],
