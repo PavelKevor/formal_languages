@@ -1,10 +1,7 @@
 language: python
-
 python:
   - "3.8"
-
 install:
-
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
   - bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda
   - source "$HOME/miniconda/etc/profile.d/conda.sh"
@@ -15,6 +12,5 @@ install:
   - conda activate assignment1
   - conda install -c conda-forge pygraphblas 
   - pip install -r requirements.txt
-
 script:
-  - pytest tests/task1.py
+  - pytest tests/main.py
