@@ -66,4 +66,4 @@ def test_of_matrix_multiplication()
 
     res = matrix1 @ matrix2
 
-    assert res.is_equivalent_to(answer)
+    assert res.iseq(answer)
