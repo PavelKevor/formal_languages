@@ -1,11 +1,11 @@
 from pyformlang import *
 from pygraphblas import *
-import Graph
+import main
 
 
 def test_intersection_of_graphs():
-    graph = Graph.Graph()
-    DFA = Graph.Graph()
+    graph = main.Graph()
+    DFA = main.Graph()
 
     graph.read_triples("tests/graph_test1.txt")
     automaton.read_regexp("tests/DFA_test1.txt")
