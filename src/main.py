@@ -42,7 +42,7 @@ class Graph:
         self.__init__()
 
         file = open(name, 'r')
-        DFA = Regex(file.read().rstrip()).to_epsilon_nfa().to_deterministic().minimize()
+        DFA = regular_expression.Regex(file.read().rstrip()).to_epsilon_nfa().to_deterministic().minimize()
         file.close()
 
         states = {}
