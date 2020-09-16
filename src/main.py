@@ -73,8 +73,7 @@ class Graph:
 
         for i in self.label_matrix:
             if i in graph2.label_matrix:
-                output.label_matrix[i] = \
-                    self.label[i].kronecker(graph2.label_matrix[i])
+                output.label_matrix[i] = self.label_matrix[i].kronecker(graph2.label_matrix[i])
 
         output.num = self.num * graph2.num
         for i in self.start_states:
