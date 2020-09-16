@@ -71,10 +71,10 @@ class Graph:
     def intersection(self, graph2):
         output = Graph()
 
-        for i in self.bool_matrix:
-            if i in other.bool_matrix:
-                res.bool_matrix[i] = \
-                    self.bool_matrix[i].kronecker(other.bool_matrix[i])
+        for i in self.label_matrix:
+            if i in graph2.label_matrix:
+                output.label_matrix[i] = \
+                    self.label[i].kronecker(graph2.label_matrix[i])
 
         output.num = self.num * graph2.num
         for i in self.start_states:
