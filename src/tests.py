@@ -1,5 +1,5 @@
 from pyformlang.finite_automaton import DeterministicFiniteAutomaton
-from pyformlang.finite_automaton import State, Symbol*
+from pyformlang.finite_automaton import State, Symbol
 from pygraphblas import *
 import main
 
