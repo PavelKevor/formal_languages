@@ -1,8 +1,6 @@
-from pyformlang.finite_automaton import DeterministicFiniteAutomaton
-from pyformlang.finite_automaton import State, Symbol
+from pyformlang import *
 from pygraphblas import *
 import main
-
 
 def test_intersection_of_graphs():
     graph = main.Graph()
@@ -28,13 +26,13 @@ def test_intersection_of_graphs():
     
 def test_intersection():
 
-    automaton1 = DeterministicFiniteAutomaton()
-    automaton2 = DeterministicFiniteAutomaton()
-    intersection = DeterministicFiniteAutomaton()
+    automaton1 = finite_automaton.DeterministicFiniteAutomaton()
+    automaton2 = finite_automaton.DeterministicFiniteAutomaton()
+    intersection = finite_automaton.DeterministicFiniteAutomaton()
 
-    state0 = State(0)
-    state1 = State(1)
-    state2 = State(2)
+    state0 = finite_automaton.State(0)
+    state1 = finite_automaton.State(1)
+    state2 = finite_automaton.State(2)
 
     automaton1.add_start_state(state0)
     automaton2.add_start_state(state0)
@@ -42,8 +40,8 @@ def test_intersection():
     automaton1.add_final_state(state2)
     automaton2.add_final_state(state2)
 
-    symbol0 = Symbol("0")
-    symbol1 = Symbol("1")
+    symbol0 = finite_automaton.Symbol("0")
+    symbol1 = finite_automaton.Symbol("1")
 
     automaton1.add_transition(state0, symbol0, state1)
     automaton1.add_transition(state0, symbol1, state2)
