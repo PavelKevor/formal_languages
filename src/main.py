@@ -53,7 +53,7 @@ class Graph:
 
         for i in DFA._states:
             for s in DFA._input_symbols:
-                for j in automaton._transition_function(i, s):
+                for j in DFA._transition_function(i, s):
                     if s in self.bool_matrix:
                         self.bool_matrix[s][states[i], states[j]] = 1
                     else:
