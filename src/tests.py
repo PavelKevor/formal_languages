@@ -9,7 +9,7 @@ def test_intersection_of_graphs():
     DFA = main.Graph()
 
     graph.read_triples("tests/graph_test1.txt")
-    automaton.read_regexp("tests/DFA_test1.txt")
+    DFA.read_regexp("tests/DFA_test1.txt")
     intersection = DFA.intersection(graph)
     
     assert graph.label_matrix["x"] == intersection.label_matrix["x"]
