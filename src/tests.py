@@ -24,7 +24,7 @@ def test_intersection_of_graphs():
     
     assert intersection.num == 28
     
-    print(garph.label_matix)
+    print(graph.label_matix)
     print(intersection.label_matrix)
 
     
