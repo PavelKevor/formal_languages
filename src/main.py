@@ -1,6 +1,7 @@
 from pygraphblas import *
 from pyformlang import *
 import sys
+import os
 
 
 
@@ -17,7 +18,7 @@ class Graph:
         
         file = open(name, 'r')
         
-        if file.read() == '':
+        if file.read() == '' or os.path.getsize(name) <= 1:
             file.close()
             return self
         
@@ -49,8 +50,7 @@ class Graph:
        
         file = open(name, 'r')
         
-        if file.read() == '':
-            print('test')
+        if file.read() == '' or os.path.getsize(name) <= 1::
             file.close()
             return self
         
