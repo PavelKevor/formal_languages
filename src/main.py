@@ -1,7 +1,6 @@
 from pygraphblas import *
 from pyformlang import *
 import sys
-import os
 
 
 
@@ -16,10 +15,12 @@ class Graph:
     def read_triples(self, name):
         self.__init__()
         
-        if os.path.getsize(name) == 0:
+        file = open(name, 'r')
+        
+        if file.read() == '':
+            file.close()
             return self
         
-        file = open(name, 'r')
         for l in file:
             line = l.split(" ")
             q1 = int(line[0])
@@ -45,11 +46,13 @@ class Graph:
 
     def read_regexp(self, name):
         self.__init__()
-        
-        if os.path.getsize(name) == 0:
-            return self
-
+       
         file = open(name, 'r')
+        
+        if file.read() == '':
+            file.close()
+            return self
+        
         DFA = regular_expression.Regex(file.read().rstrip()).to_epsilon_nfa().to_deterministic().minimize()
         file.close()
 
