@@ -30,14 +30,14 @@ def test_intersection_of_graphs():
     
     #empty graph
     graph.read_triples("tests/graph_test3.txt")
-    DFA.read_regexp("tests/DFA_test3.txt")
+    DFA.read_regexp("tests/DFA_test2.txt")
     intersection = DFA.intersection(graph)
     
     assert intersection.label_matrix == {}
     
     #empty DFA
-    graph.read_triples("tests/graph_test4.txt")
-    DFA.read_regexp("tests/DFA_test4.txt")
+    graph.read_triples("tests/graph_test2.txt")
+    DFA.read_regexp("tests/DFA_test3.txt")
     intersection = DFA.intersection(graph)
     
     assert intersection.label_matrix == {}
