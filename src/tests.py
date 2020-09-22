@@ -10,7 +10,7 @@ def test_intersection_of_graphs():
     DFA.read_regexp("tests/DFA_test1.txt")
     intersection = DFA.intersection(graph)
     
-    assert graph.label_matrix["x"] == intersection.label_matrix["x"]
+    assert graph.label_matrix["test"] == intersection.label_matrix["test"]
 
     graph.read_triples("tests/graph_test1.txt")
     DFA.read_regexp("tests/DFA_test2.txt")
