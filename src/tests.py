@@ -28,9 +28,19 @@ def test_intersection_of_graphs():
     DFA.read_regexp("tests/DFA_test3.txt")
     intersection = DFA.intersection(graph)
     
-    print(graph.label_matrix['test'])
-    print(DFA.label_matrix['test'])
-    print(intersection.label_matrix['test'])
+    #empty graph
+    graph.read_triples("tests/graph_test3.txt")
+    DFA.read_regexp("tests/DFA_test3.txt")
+    intersection = DFA.intersection(graph)
+    
+    assert intersection.label_matrix == {}
+    
+    #empty DFA
+    graph.read_triples("tests/graph_test4.txt")
+    DFA.read_regexp("tests/DFA_test4.txt")
+    intersection = DFA.intersection(graph)
+    
+    assert intersection.label_matrix == {}
 
     
 def test_intersection():
