@@ -41,6 +41,12 @@ def test_intersection_of_graphs():
     intersection = DFA.intersection(graph)
     
     assert intersection.label_matrix == {}
+    
+    graph.read_triples("tests/graph_test4.txt")
+    DFA.read_regexp("tests/DFA_test1.txt")
+    intersection = DFA.intersection(graph)
+    
+    assert graph.label_matrix["test"] == intersection.label_matrix["test"]
 
     
 def test_intersection():
