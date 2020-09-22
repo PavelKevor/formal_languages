@@ -22,7 +22,7 @@ def test_intersection_of_graphs():
     DFA.read_regexp("tests/DFA_test2.txt")
     intersection = DFA.intersection(graph)
     
-    assert intersection.num == 14
+    assert intersection.num == 28
     
 def test_intersection():
 
