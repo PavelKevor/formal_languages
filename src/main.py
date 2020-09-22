@@ -16,11 +16,10 @@ class Graph:
     def read_triples(self, name):
         self.__init__()
         
-        file = open(name, 'r')
-        
-        if file.read() == '' or os.path.getsize(name) <= 1:
-            file.close()
+        if os.path.getsize(name) <= 1:
             return self
+        
+        file = open(name, 'r')
         
         for l in file:
             line = l.split(" ")
@@ -48,12 +47,10 @@ class Graph:
     def read_regexp(self, name):
         self.__init__()
        
-        file = open(name, 'r')
-        
-        if file.read() == '' or os.path.getsize(name) <= 1::
-            file.close()
+        if os.path.getsize(name) <= 1:
             return self
         
+        file = open(name, 'r')
         DFA = regular_expression.Regex(file.read().rstrip()).to_epsilon_nfa().to_deterministic().minimize()
         file.close()
 
