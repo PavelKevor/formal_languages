@@ -24,7 +24,12 @@ def test_intersection_of_graphs():
     
     assert intersection.num == 28
     
+    graph.read_triples("tests/graph_test3.txt")
+    DFA.read_regexp("tests/DFA_test3.txt")
+    intersection = DFA.intersection(graph)
+    
     print(graph.label_matrix)
+    print(DFA.label_matrix)
     print(intersection.label_matrix)
 
     
