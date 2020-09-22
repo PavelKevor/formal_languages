@@ -50,6 +50,7 @@ class Graph:
         file = open(name, 'r')
         
         if file.read() == '':
+            print('test')
             file.close()
             return self
         
