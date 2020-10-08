@@ -8,3 +8,12 @@ Simple tests for pygraphblas and pyformlang.
  - [pytest](https://docs.pytest.org/en/stable/getting-started.html#install-pytest)
 ### To run tests:
  - pytest -s src/tests.py
+
+## Task3
+Time measurements of two implementations of transitive closure.
+### To download data:
+ - gdown https://drive.google.com/uc?id=158g01o2rpdq5eL3Ari8e5SPbbeZTJspr
+### To run benchmark:
+ - bash benchmark.sh
+### To see histograms in your browser:
+ - python3 histograms.py
