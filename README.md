@@ -14,6 +14,6 @@ Time measurements of two implementations of transitive closure.
 ### To download data:
  - gdown https://drive.google.com/uc?id=158g01o2rpdq5eL3Ari8e5SPbbeZTJspr
 ### To run benchmark:
- - bash benchmark.sh
+ - bash benchmark1.sh
 ### To see histograms in your browser:
  - python3 histograms.py
