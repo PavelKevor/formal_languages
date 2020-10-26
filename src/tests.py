@@ -7,7 +7,7 @@ from main import *
 
 def test_hellings():
     graph = Graph()
-    graph.read_triples("tests/graph2.txt")
+    graph.read_triples("tests/graph_test2.txt")
 
     cfgrammar = read_cfgrammar("tests/grammar_test2.txt")
     cfgrammar_crf = cfgrammar.to_normal_form()
