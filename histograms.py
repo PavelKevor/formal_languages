@@ -32,7 +32,7 @@ for line in file:
         fig.show()
 
         regexp = []
-        tc = []
+        ajm = []
         sqr = []
         i += 1
         num = 0
