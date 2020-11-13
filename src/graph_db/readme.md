@@ -1,4 +1,4 @@
-### graph_db language documentation
+### graph_database language documentation
 
 - connect [name] - You can connect to database.
 
