@@ -19,5 +19,6 @@ Time measurements of two implementations of transitive closure.
  - python3 histograms.py
  
  ## Task7 Graph_database query language syntax.
- [language grammar](https://github.com/PavelKevor/formal_languages/blob/task-7/src/graph_db/language_grammar)
- [documentation](https://github.com/PavelKevor/formal_languages/blob/task-7/src/graph_db/readme.md)
+ [Language grammar](https://github.com/PavelKevor/formal_languages/blob/task-7/src/graph_db/language_grammar)
+ 
+ [Documentation](https://github.com/PavelKevor/formal_languages/blob/task-7/src/graph_db/readme.md)
