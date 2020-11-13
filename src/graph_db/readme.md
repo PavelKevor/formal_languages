@@ -20,7 +20,7 @@ select edges graph2
 1) If you type graph name, graph with this name will load from your database.
 2) Regular expression will take regexp with given pattern. It should be in  {}.
 In regular expression you can use:
-- alt - alternative plus
+- alt - alternative plus.
 - star - operator *.
 - plus - one or more.
 - option - optional character.
