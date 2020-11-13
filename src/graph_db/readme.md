@@ -15,8 +15,8 @@ connect '/home/fl/graphs'
 
 Example:
 ```sh
-select count graph1
-select edges graph2
+select count 'graph1'
+select edges 'graph2'
 ```
 [graph] can be a 1)name, 2)graph intersection or 3)graph intersection.
 
@@ -26,7 +26,7 @@ select edges graph2
 
 Example:
 ```sh
-select edges graph1 intersect graph2
+select edges graph1 intersect 'graph2'
 ```
 3) If you type regular expression,you will take regexp with given pattern. It should be in  {}.
 
@@ -39,9 +39,9 @@ In regular expression you can use:
 
 Example:
 ```sh
-select count from graph intersect {'a' plus conc 'b'}
-select count from graph intersect {'a' option conc 'b' conc 'c' plus}
-select edges from graph intersect {('a' alt 'b') star conc 'c' plus conc 'd' plus}
+select count from 'graph' intersect {'a' plus conc 'b'}
+select count from 'graph' intersect {'a' option conc 'b' conc 'c' plus}
+select edges from 'graph' intersect {('a' alt 'b') star conc 'c' plus conc 'd' plus}
 ```
 
 
