@@ -20,8 +20,7 @@ select edges graph2
 ```
 [graph] can be a 1)name, 2)regular expression or 3)graph intersection.
 1) If you type graph name, graph with this name will load from your database.
-2) Regular expression will take regexp with given pattern. It should be in  {}.
-
+2) If you type regular expression,you will take regexp with given pattern. It should be in  {}.
 
 In regular expression you can use:
 - alt - alternative plus.
@@ -36,8 +35,9 @@ select count from graph intersect {'a' option conc 'b' conc 'c' plus}
 select edges from graph intersect {('a' alt 'b') star conc 'c' plus conc 'd' plus}
 ```
 
-3) You can intesect graphes - [graph] intersect [graph].
-Example
+3) You can intersect graphes - [graph] intersect [graph].
+
+Example:
 ```sh
 select edges graph1 intersect graph2
 ```
