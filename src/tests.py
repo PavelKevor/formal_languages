@@ -1,50 +1,104 @@
 from pyformlang import *
 from pygraphblas import *
-import main
+from Graph import Graph
+from main import *
+
+
+
+def test_hellings():
+    graph = Graph()
+    graph.read_triples("tests/graph_test2.txt")
+
+    cfgrammar = read_cfgrammar("tests/grammar_test2.txt")
+    cfgrammar_crf = cfgrammar.to_normal_form()
+    cfgrammar_cnf = cnf(cfgrammar)
+    
+    #empty graph
+    graph.read_triples("tests/graph_test3.txt")
+    assert not hellings(graph, cfgrammar_crf)
+
+    #graph with loop
+    graph.read_triples("tests/graph_test4.txt")
+    assert hellings(graph, cfgrammar_crf).select("==", 1).nvals == 0
+
+    graph.read_triples("tests/graph_test1.txt")
+    assert hellings(graph, cfgrammar_crf).select("==", 1).nvals == 0
+
+def test_cyk():
+    cfg = read_cfgrammar("tests/grammar_test1.txt")
+    cfgrammar_cnf = cnf(cfg)
+ 
+    assert cyk(cfgrammar_cnf, "0 0 0")
+    assert not cyk(cfgrammar_cnf, "0 1 10 11")
+    assert not cyk(cfgrammar_cnf, "0000000")
+    assert not cyk(cfgrammar_cnf, "1 1 0")
+    assert not cyk(cfgrammar_cnf, " ")
+
+
+
+    
+    cfg = read_cfgrammar("tests/grammar_test2.txt")
+    cfgrammar_cnf = cnf(cfg)
+   
+    assert cyk(cfgrammar_cnf, "1 1 1")
+    assert not cyk(cfgrammar_cnf, "0 1 10 11")
+    assert cyk(cfgrammar_cnf, "1 1 0")
+    assert not cyk(cfgrammar_cnf, "11111111")
+    assert cyk(cfgrammar_cnf, " ")
+
+
+
 
 def test_intersection_of_graphs():
-    graph = main.Graph()
-    DFA = main.Graph()
+    graph = Graph()
+    DFA = Graph()
 
     graph.read_triples("tests/graph_test1.txt")
     DFA.read_regexp("tests/DFA_test1.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     assert graph.label_matrix["test"] == intersection.label_matrix["test"]
 
     graph.read_triples("tests/graph_test1.txt")
     DFA.read_regexp("tests/DFA_test2.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     assert not intersection.label_matrix
     
     graph.read_triples("tests/graph_test2.txt")
     DFA.read_regexp("tests/DFA_test2.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     assert intersection.num == 28
     
     graph.read_triples("tests/graph_test3.txt")
     DFA.read_regexp("tests/DFA_test3.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     #empty graph
     graph.read_triples("tests/graph_test3.txt")
     DFA.read_regexp("tests/DFA_test2.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     assert intersection.label_matrix == {}
     
     #empty DFA
     graph.read_triples("tests/graph_test2.txt")
     DFA.read_regexp("tests/DFA_test3.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     assert intersection.label_matrix == {}
     
     graph.read_triples("tests/graph_test4.txt")
     DFA.read_regexp("tests/DFA_test1.txt")
-    intersection = DFA.intersection(graph)
+    intersection = Graph()
+    intersection.intersection(DFA, graph)
     
     assert graph.label_matrix["test"] == intersection.label_matrix["test"]
 
@@ -113,3 +167,5 @@ def test_of_matrix_multiplication():
     res = matrix1 @ matrix2
 
     assert res.iseq(answer)
+
+

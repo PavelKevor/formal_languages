@@ -1,140 +1,150 @@
+from pyformlang.cfg import Terminal, CFG, Epsilon, Variable, Production
 from pygraphblas import *
-from pyformlang import *
-import sys
-import os
+from collections import *
+from Graph import Graph
 
 
+def read_cfgrammar(name):
+    file = open(name, 'r')
+    p = []
+    for line in file:
+        p += [line.split()[0] + " -> " + " ".join(line.split()[1:])]
+    file.close()
+
+    return CFG.from_text("\n".join(p))
+    
 
 
-class Graph:
-    def __init__(self):
-        self.start_states = []
-        self.final_states = []
-        self.label_matrix = {}
-        self.num = 0
-
-    def read_triples(self, name):
-        self.__init__()
-        
-        if os.path.getsize(name) <= 1:
-            return self
-        
-        file = open(name, 'r')
-        
-        for l in file:
-            line = l.split(" ")
-            q1 = int(line[0])
-            m = line[1]
-            q2 = int(line[2])
-
-            self.num = max(max(q1, q2) + 1, self.num)
-
-            if m not in self.label_matrix:
-                bool_matrix = Matrix.sparse(BOOL, self.num, self.num)
-                bool_matrix[q1, q2] = 1
-                self.label_matrix[m] = bool_matrix
-            else:
-                if self.num > self.label_matrix[m].nrows:
-                    self.label_matrix[m].resize(self.num, self.num)
-                self.label_matrix[m][q1, q2] = 1
-
-        self.start_states = [i for i in range(self.num)]
-        self.final_states = [i for i in range(self.num)]
-        file.close()
-
-        return self
-
-    def read_regexp(self, name):
-        self.__init__()
-       
-        if os.path.getsize(name) <= 1:
-            return self
-        
-        file = open(name, 'r')
-        DFA = regular_expression.Regex(file.read().rstrip()).to_epsilon_nfa().to_deterministic().minimize()
-        file.close()
-
-        states = {}
-        for s in DFA._states:
-            if s not in states:
-                states[s] = len(states)
-        self.num = len(states)
-
-        for i in DFA._states:
-            for s in DFA._input_symbols:
-                for j in DFA._transition_function(i, s):
-                    if s in self.label_matrix:
-                        self.label_matrix[s][states[i], states[j]] = 1
-                    else:
-                        bool_matrix = Matrix.sparse(BOOL, self.num, self.num)
-                        bool_matrix[states[i], states[j]] = 1
-                        self.label_matrix[s] = bool_matrix
-
-        self.start_states.append(states[DFA.start_state])
-
-        for s in DFA._final_states:
-            self.final_states.append(states[s])
-
-        return self
-
-    def intersection(self, graph2):
-        output = Graph()
-
-        for i in self.label_matrix:
-            if i in graph2.label_matrix:
-                output.label_matrix[i] = self.label_matrix[i].kronecker(graph2.label_matrix[i])
-
-        output.num = self.num * graph2.num
-        for i in self.start_states:
-            for j in graph2.start_states:
-                output.start_states.append(i * self.num + j)
-
-        for i in self.final_states:
-            for j in graph2.final_states:
-                output.final_states.append(i * self.num + j)
-
-        return output
-
-    def reach_from_all_pairs(self):
-        output = Matrix.random(BOOL, self.num, self.num, 0).full(0)
-
-        for i in self.bool_matrix:
-            if self.bool_matrix[i].nrows < self.num:
-                self.bool_matrix[i].resize(self.num, self.num)
-            output = output | self.bool_matrix[label]
-
-        for i in range(self.num):
-            output += output @ output
-
-        return output
-
-    def reach_from_set(self, s):
-        output = self.reach_from_all_pairs()
-
-        for i in range(self.num):
-            if i not in s:
-                output.assign_row(i, Vector.sparse(BOOL, self.num).full(0))
-
-        return output
-
-    def reach_from_set_to_set(self, s1, s2):
-        output = self.reach_from_all_pairs()
-
-        for i in range(self.num):
-            if i not in s1:
-                output.assign_row(i, Vector.sparse(BOOL, self.num).full(0))
-            if i not in s2:
-                output.assign_col(i, Vector.sparse(BOOL, self.num).full(0))
-
-        return output
-
-
-if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("incorrect input")
+def cnf(cfgrammar):
+    if not cfgrammar.generate_epsilon():
+        return cfgrammar.to_normal_form()
+    
     else:
-        graph = Graph()
-        DFA = Graph()
-        graph.read_triples(sys.argv[1])
-        DFA.read_regexp(sys.argv[2])
-        DFA.intersection(graph)
+        cfgrammar = cfgrammar.to_normal_form()
+        new_symbol = Variable(cfgrammar.start_symbol.value + "'")
+        cfgrammar.productions.add(Production(new_symbol, []))
+        
+        output = CFG(variables=cfgrammar.variables,
+                  start_symbol=new_symbol,
+                     terminals=cfgrammar.terminals)
+        
+        output.variables.add(new_symbol)
+        
+        for i in cfgrammar.productions:
+            if cfgrammar.start_symbol == i.head :
+                output.productions.add(Production(new_symbol, i.body))
+            output.productions.add(i)
+            
+        return output
+        
+
+
+
+
+def sup(p):
+    if not p.body:
+        return Epsilon()
+    else:
+        return list(p.body)[0]
+        
+
+
+def cyk(cfgrammar, w):
+    w = w.split()
+    length = len(w)
+    if length != 0:
+        number = len(cfgrammar.variables)
+        matrix = [[[0 for _ in range(length)] for _ in range(length)] for _ in range(number)]
+        variables = dict(zip(cfgrammar.variables, range(number)))
+        
+        symbols = defaultdict(list)
+        for i, s in enumerate(w):
+            symbols[s].append(i)
+
+        
+        bodies = defaultdict(list)
+        for i, s in enumerate(list(map(sup, cfgrammar.productions))):
+            bodies[s].append(i)
+       
+                              
+        for s in w:
+            if s == ' ':
+                term = Epsilon()
+            else:
+                term = Terminal(s)
+            
+            if term in bodies:
+                for i in symbols[s]:
+                    for j in bodies[term]:
+                        matrix[variables[list(cfgrammar.productions)[j].head]][i][i] = 1
+        for m in range(1, length):
+            for i in range(length - m):
+                j = i + m
+                for n in range(number):
+                    for p in cfgrammar.productions:
+                        for k in range(i, j):
+                            for key, value in variables.items():
+                                if n == value:
+                                    h = key
+                                    
+                            if p.head == h and len(p.body) == 2:
+                                matrix[n][i][j] += matrix[variables[list(p.body)[0]]][i][k] * matrix[variables[list(p.body)[1]]][k + 1][j]
+                                if matrix[n][i][j]:
+                                    break
+                        if matrix[n][i][j]:
+                            break
+
+    else:
+        return cfgrammar.generate_epsilon()
+        
+    
+    return bool(matrix[variables[cfgrammar.start_symbol]][0][length - 1])
+
+
+
+def hellings(graph, cfgrammar):
+    if graph.num != 0:
+
+        vertices_list = list()
+        if cfgrammar.generate_epsilon():
+            for i in range(graph.num):
+                vertices_list.append([cfgrammar.start_symbol, i, i])
+
+        body = defaultdict(list)
+        for i, s in enumerate(list(map(sup, cfgrammar.productions))):
+            body[s].append(i)
+        
+        for label in graph.label_matrix:
+            term = Terminal(label)
+            if term in body:
+                for k in range(len(body[term])):
+                    var = list(cfgrammar.productions)[body[term][k]].head
+                    for i in range(graph.num):
+                        for j in range(graph.num):
+                            if graph.label_matrix[label][i, j]:
+                                vertices_list.append([var, i, j])
+        vertices_list_copy = vertices_list.copy()
+        while vertices_list_copy:
+            var1, v1, v2 = vertices_list_copy.pop()
+            for var2, u1, u2 in vertices_list:
+                if u2 == v1:
+                    for production in cfgrammar.productions:
+                        if list(production.body) == {var2, var1} and (production.head, u1, v2) not in vertices_list:
+                            vertices_list_copy.append((production.head, u1, v2))
+                            vertices_list.append((production.head, u1, v2))
+                elif u1 == v2:
+                    for p in cfgrammar.productions:
+                        if list(p.body) == {var1, var2} and (p.head, v1, u1) not in vertices_list:
+                            vertices_list_copy.append((p.head, v1, u1))
+                            
+                            vertices_list.append((p.head, v1, u1))
+        reach_matrix = Matrix.sparse(BOOL, graph.num, graph.num).full(0)
+        for v, i, j in vertices_list:
+            if v == cfgrammar.start_symbol:
+                reach_matrix[i, j] = 1
+        return reach_matrix
+
+    else:
+        return False
+        
+
