@@ -1,18 +1,34 @@
 from pyformlang.cfg import Terminal, CFG, Epsilon, Variable, Production
+from pyformlang.regular_expression import Regex
 from pygraphblas import *
 from collections import *
 from Graph import Graph
 
 
+
 def read_cfgrammar(name):
     file = open(name, 'r')
-    p = []
-    for line in file:
-        p += [line.split()[0] + " -> " + " ".join(line.split()[1:])]
-    file.close()
 
-    return CFG.from_text("\n".join(p))
+    s = ''
+    cfg_from_regex = []
+    for line in file:
+        if 'regexp'  in line:
+            line = line.replace('regexp', "")
+            head = line.split(" -> ")[0]
+            regex = Regex(line.split(" -> ")[1][:-1])
+            cfg_from_regex.append(regex.to_cfg(starting_symbol=head))           
+        else:
+            s += line
+            
+    file.close()
+    cfg = CFG.from_text(s)
+
+    for c in cfg_from_regex:
+        cfg = CFG(cfg.variables.union(c.variables), cfg.terminals.union(c.terminals), cfg.start_symbol, cfg.productions.union(c.productions))
+
     
+    return cfg
+
 
 
 def cnf(cfgrammar):
@@ -47,7 +63,6 @@ def sup(p):
     else:
         return list(p.body)[0]
         
-
 
 def cyk(cfgrammar, w):
     w = w.split()
@@ -99,7 +114,6 @@ def cyk(cfgrammar, w):
         
     
     return bool(matrix[variables[cfgrammar.start_symbol]][0][length - 1])
-
 
 
 def hellings(graph, cfgrammar):
