@@ -7,7 +7,7 @@ for (( i=0; i < 5; i++ ))
 do
     for r in $REGEXES
     do
-        python3 src/benchmark.py ${GRAPHS[i]} $r
+        python3 src/benchmark_rpq.py ${GRAPHS[i]} $r
     done
 done
 
