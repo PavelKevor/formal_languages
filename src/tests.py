@@ -32,7 +32,6 @@ def test_cyk():
     assert not cyk(cfgrammar_cnf, "0 1 10 11")
     assert not cyk(cfgrammar_cnf, "0000000")
     assert not cyk(cfgrammar_cnf, "1 1 0")
-    assert not cyk(cfgrammar_cnf, " ")
 
 
 
@@ -44,7 +43,7 @@ def test_cyk():
     assert not cyk(cfgrammar_cnf, "0 1 10 11")
     assert cyk(cfgrammar_cnf, "1 1 0")
     assert not cyk(cfgrammar_cnf, "11111111")
-    assert cyk(cfgrammar_cnf, " ")
+
 
 
 
