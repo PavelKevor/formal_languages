@@ -28,7 +28,7 @@ def test_cyk():
     cfg = read_cfgrammar("tests/grammar_test1.txt")
     cfgrammar = cnf(cfg)
  
-    assert cyk(cfgrammar_cnf, "0 0 0")
+    assert cyk(cfgrammar, "0 0 0")
     assert not cyk(cfgrammar, "0 1 10 11")
     assert not cyk(cfgrammar, "0000000")
     assert not cyk(cfgrammar, "1 1 0")
