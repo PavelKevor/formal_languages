@@ -55,13 +55,12 @@ def cnf(cfgrammar):
         
 
 
-
-
-def sup(p):
-    if not p.body:
-        return Epsilon()
+def check_eps(p):
+    if p.body:
+        if len(p.body) == 1:
+            return list(p.body)[0]
     else:
-        return list(p.body)[0]
+        return Epsilon()
         
 
 def cyk(cfgrammar, w):
@@ -116,49 +115,56 @@ def cyk(cfgrammar, w):
     return bool(matrix[variables[cfgrammar.start_symbol]][0][length - 1])
 
 
-def hellings(graph, cfgrammar):
-    if graph.num != 0:
-
-        vertices_list = list()
-        if cfgrammar.generate_epsilon():
-            for i in range(graph.num):
-                vertices_list.append([cfgrammar.start_symbol, i, i])
-
-        body = defaultdict(list)
-        for i, s in enumerate(list(map(sup, cfgrammar.productions))):
-            body[s].append(i)
-        
-        for label in graph.label_matrix:
-            term = Terminal(label)
-            if term in body:
-                for k in range(len(body[term])):
-                    var = list(cfgrammar.productions)[body[term][k]].head
-                    for i in range(graph.num):
-                        for j in range(graph.num):
-                            if graph.label_matrix[label][i, j]:
-                                vertices_list.append([var, i, j])
-        vertices_list_copy = vertices_list.copy()
-        while vertices_list_copy:
-            var1, v1, v2 = vertices_list_copy.pop()
-            for var2, u1, u2 in vertices_list:
-                if u2 == v1:
-                    for production in cfgrammar.productions:
-                        if list(production.body) == {var2, var1} and (production.head, u1, v2) not in vertices_list:
-                            vertices_list_copy.append((production.head, u1, v2))
-                            vertices_list.append((production.head, u1, v2))
-                elif u1 == v2:
-                    for p in cfgrammar.productions:
-                        if list(p.body) == {var1, var2} and (p.head, v1, u1) not in vertices_list:
-                            vertices_list_copy.append((p.head, v1, u1))
-                            
-                            vertices_list.append((p.head, v1, u1))
-        reach_matrix = Matrix.sparse(BOOL, graph.num, graph.num).full(0)
-        for v, i, j in vertices_list:
-            if v == cfgrammar.start_symbol:
-                reach_matrix[i, j] = 1
-        return reach_matrix
-
-    else:
+def hellings(cfgrammar, graph):
+    
+    vert_list = []
+    if graph.num == 0:
         return False
-        
+    
+    if cfgrammar.generate_epsilon():
+        for i in range(graph.num):
+            vert_list += [[cfgrammar.start_symbol, i, i]]
+         
+    term = defaultdict(list)
+    for i, s in enumerate(list(map(check_eps, cfgrammar.productions))):
+        term[s].append(i)
+    term.pop(None)
+    
+    
+    for label in graph.label_matrix:
+        terminal = Terminal(label)
+        if terminal in term:
+            for k in range(len(term[terminal])):
+                h = list(cfgrammar.productions)[term[terminal][k]].head
+                for i in range(graph.num):
+                    for j in range(graph.num):
+                        if (i, j) in graph.label_matrix[label]:
+                            vert_list.append([h, i, j])
+                            
+    prod_list = []
+    for i in cfgrammar.productions:
+        if len(i.body) == 2:
+            prod_list.append(i)
+
+    vert_list_copy = vert_list.copy()
+    while vert_list_copy:
+        variable_copy, i, j = vert_list_copy.pop()
+        for variable, l, k in vert_list:
+            if i == k:
+                for p in prod_list:
+                    if (p.head, l, j) not in vert_list and list(p.body) == [variable, variable_copy]:
+                        vert_list_copy.append((p.head, l, j))
+                        vert_list.append((p.head, l, j))
+            elif j == l:
+                for p in prod_list:
+                    if (p.head, i, l) not in vert_list and list(p.body) == [variable_copy, variable]:
+                        vert_list_copy.append((p.head, i, l))
+                        vert_list.append((p.head, i, l))
+    
+    output = Matrix.sparse(BOOL, graph.num, graph.num)
+    for variable, i, j in vert_list:
+        if variable == cfgrammar.start_symbol:
+            output[i, j] = 1
+            
+    return output
 
