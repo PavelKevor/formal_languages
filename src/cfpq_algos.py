@@ -5,9 +5,9 @@ from Graph import Graph
 from main import *
 
 
-def tensor(cfgrammar, graph):
+def tensor(graph, cfgrammar):
     
-    if graph.num == 0:
+    if graph.num != 0:
         return False
     rec_automaton = Graph()
    
@@ -80,7 +80,7 @@ def MxM(cfgrammar, graph):
     output.label_matrix[cfgrammar.start_symbol] = Matrix.sparse(BOOL, output.num, output.num)
     
     term = defaultdict(list)
-    for i, s in enumerate(list(map(change_edges, cfgrammar.productions))):
+    for i, s in enumerate(list(map(check_eps, cfgrammar.productions))):
         term[s].append(i)
     term.pop(None)
 
@@ -135,7 +135,7 @@ def hellings(cfgrammar, graph):
             vert_list += [[cfgrammar.start_symbol, i, i]]
          
     term = defaultdict(list)
-    for i, s in enumerate(list(map(change_edges, cfgrammar.productions))):
+    for i, s in enumerate(list(map(check_eps, cfgrammar.productions))):
         term[s].append(i)
     term.pop(None)
     
@@ -176,12 +176,3 @@ def hellings(cfgrammar, graph):
             output[i, j] = 1
             
     return output
-
-
-
-
-
-
-
-
-
