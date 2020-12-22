@@ -77,7 +77,7 @@ def cyk(cfgrammar, w):
 
         
         bodies = defaultdict(list)
-        for i, s in enumerate(list(map(chack_eps, cfgrammar.productions))):
+        for i, s in enumerate(list(map(check_eps, cfgrammar.productions))):
             bodies[s].append(i)
        
                               
