@@ -36,5 +36,5 @@ Time measurements of two implementations of transitive closure.
 ```sh
 check_word('a*|a*.b', 'aaaaaaaaab')
 check_word('a*.b*.c.d|d*.c*.b.a', 'aaabbbcd')
-assert check_word('test1*|test1*.test2', 'test1test1test1test2')
+ check_word('test1*|test1*.test2', 'test1test1test1test2')
 ```
