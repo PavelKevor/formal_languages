@@ -10,39 +10,39 @@ def test_hellings():
     graph.read_triples("tests/graph_test2.txt")
 
     cfgrammar = read_cfgrammar("tests/grammar_test2.txt")
-    cfgrammar_crf = cfgrammar.to_normal_form()
-    cfgrammar_cnf = cnf(cfgrammar)
+    cfgrammar = cfgrammar.to_normal_form()
+    cfgrammar = cnf(cfgrammar)
     
     #empty graph
     graph.read_triples("tests/graph_test3.txt")
-    assert not hellings(graph, cfgrammar_crf)
+    assert not hellings(cfgrammar, graph)
 
     #graph with loop
     graph.read_triples("tests/graph_test4.txt")
-    assert hellings(graph, cfgrammar_crf).select("==", 1).nvals == 0
+    assert hellings(cfgrammar, graph).select("==", 1).nvals == 0
 
     graph.read_triples("tests/graph_test1.txt")
-    assert hellings(graph, cfgrammar_crf).select("==", 1).nvals == 0
+    assert hellings(cfgrammar, graph).select("==", 1).nvals == 0
 
 def test_cyk():
     cfg = read_cfgrammar("tests/grammar_test1.txt")
-    cfgrammar_cnf = cnf(cfg)
+    cfgrammar = cnf(cfg)
  
     assert cyk(cfgrammar_cnf, "0 0 0")
-    assert not cyk(cfgrammar_cnf, "0 1 10 11")
-    assert not cyk(cfgrammar_cnf, "0000000")
-    assert not cyk(cfgrammar_cnf, "1 1 0")
+    assert not cyk(cfgrammar, "0 1 10 11")
+    assert not cyk(cfgrammar, "0000000")
+    assert not cyk(cfgrammar, "1 1 0")
 
 
 
     
     cfg = read_cfgrammar("tests/grammar_test2.txt")
-    cfgrammar_cnf = cnf(cfg)
+    cfgrammar = cnf(cfg)
    
-    assert cyk(cfgrammar_cnf, "1 1 1")
-    assert not cyk(cfgrammar_cnf, "0 1 10 11")
-    assert cyk(cfgrammar_cnf, "1 1 0")
-    assert not cyk(cfgrammar_cnf, "11111111")
+    assert cyk(cfgrammar, "1 1 1")
+    assert not cyk(cfgrammar, "0 1 10 11")
+    assert cyk(cfgrammar, "1 1 0")
+    assert not cyk(cfgrammar, "11111111")
 
 
 
