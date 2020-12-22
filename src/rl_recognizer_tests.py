@@ -1,7 +1,7 @@
 from regular_language_recognizer import *
 
 
-def check_word_test:
+def test_check_word:
     assert check_word('a*|a*.b', 'ab')
 
     assert check_word('a*|a*.b', 'aaaaaaaaab')
