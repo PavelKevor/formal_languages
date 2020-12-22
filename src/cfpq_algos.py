@@ -5,15 +5,7 @@ from Graph import Graph
 from main import *
 
 
-
-def change_edges(p):
-    if p.body:
-        if len(p.body) == 1:
-            return list(p.body)[0]
-    else:
-        return Epsilon()
-
-def tensor(graph, cfgrammar):
+def tensor(cfgrammar, graph):
     
     if graph.num == 0:
         return False
