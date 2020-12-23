@@ -7,7 +7,7 @@ from main import *
 
 def tensor(cfgrammar, graph):
     
-    if graph.num != 0:
+    if graph.num == 0:
         return False
     rec_automaton = Graph()
    
