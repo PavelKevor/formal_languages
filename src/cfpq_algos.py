@@ -5,7 +5,7 @@ from Graph import Graph
 from main import *
 
 
-def tensor(graph, cfgrammar):
+def tensor(cfgrammar, graph):
     
     if graph.num != 0:
         return False
