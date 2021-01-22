@@ -1,8 +1,77 @@
 from pyformlang import *
 from pygraphblas import *
 from Graph import Graph
+from cfpq_algos import *
 from main import *
 
+def test_MxM_and_tensor():
+    graph = Graph()
+  
+    graph.read_triples("tests/graph_test5.txt")
+    grammar = read_cfgrammar("tests/grammar_test3.txt")
+    grammar = cnf(grammar)
+    hellings_res = hellings(grammar, graph)
+    MxM_res = MxM(grammar, graph)
+    tensor_res = tensor(grammar, graph)
+    assert hellings_res.iseq(MxM_res)
+    assert MxM_res.iseq(tensor_res)
+ 
+    grammar = read_cfgrammar("tests/grammar_test2.txt")
+    grammar = cnf(grammar)
+     #empty graph
+    graph.read_triples("tests/graph_test3.txt")
+    hellings_res = hellings(grammar, graph)
+    MxM_res = MxM(grammar, graph)
+    tensor_res = tensor(grammar, graph)
+    assert hellings_res == MxM_res
+    assert MxM_res == tensor_res
+
+     #loop
+    graph.read_triples("tests/graph_test4.txt")
+    grammar = read_cfgrammar("tests/grammar_test5.txt")
+    grammar = cnf(grammar)
+    hellings_res = hellings(grammar, graph)
+    MxM_res = MxM(grammar, graph)
+    tensor_res = tensor(grammar, graph)
+    assert hellings_res.nvals == 1
+    assert MxM_res.nvals == 1
+    assert tensor_res.nvals == 1
+    assert hellings_res.iseq(MxM_res)
+    assert MxM_res.iseq(tensor_res)
+
+    
+    graph.read_triples("tests/graph_test5.txt")
+    grammar = read_cfgrammar("tests/grammar_test2.txt")
+    grammar = cnf(grammar)
+    hellings_res = hellings(grammar, graph)
+    MxM_res = MxM(grammar, graph)
+    tensor_res = tensor(grammar, graph)
+    assert hellings_res.iseq(MxM_res)
+    assert MxM_res.iseq(tensor_res)
+    
+
+    graph.read_triples("tests/graph_test6.txt")
+    grammar = read_cfgrammar("tests/grammar_test3.txt")
+    grammar = cnf(grammar)
+    hellings_res = hellings(grammar, graph)
+    MxM_res = MxM(grammar, graph)
+    tensor_res = tensor(grammar, graph)
+    assert hellings_res.nvals == 6
+    assert MxM_res.nvals == 6
+    assert tensor_res.nvals == 6
+    assert hellings_res.iseq(MxM_res)
+    assert MxM_res.iseq(tensor_res)
+    
+
+    graph.read_triples("tests/graph_test7.txt")
+    grammar = read_cfgrammar("tests/grammar_test6.txt")
+    grammar = cnf(grammar)
+    hellings_res = hellings(grammar, graph)
+    MxM_res = MxM(grammar, graph)
+    tensor_res = tensor(grammar, graph)
+  
+    assert hellings_res.iseq(MxM_res)
+    assert MxM_res.iseq(tensor_res)
 
 
 def test_hellings():
@@ -32,9 +101,6 @@ def test_cyk():
     assert not cyk(cfgrammar, "0 1 10 11")
     assert not cyk(cfgrammar, "0000000")
     assert not cyk(cfgrammar, "1 1 0")
-
-
-
     
     cfg = read_cfgrammar("tests/grammar_test2.txt")
     cfgrammar = cnf(cfg)
