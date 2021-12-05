@@ -1,0 +1,17 @@
+S -> P
+P -> a P
+P -> b P
+P -> c P
+P -> h P
+P -> e P
+P -> f P
+P -> g P
+P -> h P
+P -> a
+P -> b
+P -> c
+P -> h
+P -> e
+P -> f
+P -> g
+P -> h
